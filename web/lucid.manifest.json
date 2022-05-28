@@ -1,0 +1,12 @@
+{
+  "url": "https://dmcong.github.io/lucid-app/index.js",
+  "appId": "lucid",
+  "name": "Lucid",
+  "author": {
+    "name": "lucid",
+    "email": "congdm@descartes.network"
+  },
+  "tags": ["solana", "dapps"],
+  "description": "A sample project for Sentre developers",
+  "verified": false
+}

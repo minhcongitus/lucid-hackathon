@@ -1,0 +1,67 @@
+.pool-card {
+  position: relative;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(20px);
+  cursor: pointer;
+  transition: all 0.15s linear;
+  z-index: 99;
+  // &.active {
+  //   border-radius: 44px 44px 0 0 !important;
+  // }
+  .symbol {
+    color: #6d90ff !important;
+    font-weight: 600 !important;
+  }
+  // top pool
+  &.top-1 {
+    .symbol {
+      color: #ffc56d !important;
+    }
+  }
+  &.top-2 {
+    .symbol {
+      color: #bcbcbc !important;
+    }
+  }
+  &.top-3 {
+    .symbol {
+      color: #a95b30 !important;
+    }
+  }
+  // action
+  &:hover {
+    background: rgba(255, 255, 255, 0.261) !important;
+  }
+}
+.wrap-card-pool {
+  position: relative;
+  .lucid-image {
+    position: absolute !important;
+    top: 18px;
+    left: -5px;
+    z-index: -1;
+  }
+}
+// Expand card
+.lucid-expand-card {
+  position: relative;
+  top: -40px;
+  background: rgba(255, 255, 255, 0.29) !important;
+  border: none !important;
+  border-radius: 0 0 44px 44px !important;
+  z-index: 98;
+  .lucid-collapse-header {
+    padding: 0 !important;
+    border: none !important;
+  }
+  .lucid-collapse-content-box {
+    padding: 55px 16px 24px 16px !important;
+  }
+  .lucid-collapse-item {
+    border: none !important;
+  }
+  & *:not(button) {
+    background-color: transparent !important;
+  }
+}
