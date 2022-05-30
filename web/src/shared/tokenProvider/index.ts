@@ -1,5 +1,5 @@
 import lunr, { Index } from 'lunr'
-import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry'
+import { TokenInfo } from '@solana/spl-token-registry'
 
 import { net, chainId, ChainId, Net } from 'shared/runtime'
 import supplementary, { sntr, sol } from './supplementary'
@@ -33,9 +33,10 @@ class TokenProvider {
       // Start
       this.loading = true
       // Build token list
-      let tokenList = await (await new TokenListProvider().resolve())
-        .filterByChainId(this.chainId)
-        .getList()
+      let tokenList: any[] = []
+      // await (await new TokenListProvider().resolve())
+      //   .filterByChainId(this.chainId)
+      //   .getList()
       if (this.cluster === 'devnet') tokenList = tokenList.concat(supplementary)
       if (this.cluster === 'testnet')
         tokenList = tokenList.concat([sntr(102), sol(102)])

@@ -66,7 +66,7 @@ export const chainId: ChainId = getChainId()
 const CLUSTERS: Record<Net, string[]> = {
   devnet: [
     'https://api.devnet.solana.com',
-    'https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/',
+    // 'https://psytrbhymqlkfrhudd.dev.genesysgo.net:8899/',
   ],
   testnet: ['https://api.testnet.solana.com'],
   mainnet: [

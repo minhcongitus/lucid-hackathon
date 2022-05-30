@@ -14,7 +14,7 @@ import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
 const Borrow = ({ poolAddress }: { poolAddress: string }) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
-  const { lptMint } = usePoolData(poolAddress)
+  const { lptMint, fee } = usePoolData(poolAddress)
   const poolPrices = usePoolPrices(poolAddress)
   const { balance } = useAccountBalanceByMintAddress(lptMint.toBase58())
   const lucid = useLucid()
@@ -94,9 +94,10 @@ const Borrow = ({ poolAddress }: { poolAddress: string }) => {
           </Col>
           <Col>
             <Typography.Title level={4} style={{ color: '#000000' }}>
-              {numeric((Number(amount) * poolPrices.lptPrice) / 2).format(
-                '$0,0.[000]',
-              )}
+              {numeric(
+                ((Number(amount) * poolPrices.lptPrice) / 2) *
+                  (1 - Number(fee.toNumber() / 10 ** 9)),
+              ).format('$0,0.[000]')}
             </Typography.Title>
           </Col>
         </Row>

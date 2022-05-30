@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@senhub/providers'
 
 import { Card, Input, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import TokenProvider from 'shared/tokenProvider'
 
 const KEYSIZE = 3
+
+const tokenProvider = new TokenProvider()
 
 const Search = ({
   onChange,
@@ -16,7 +18,6 @@ const Search = ({
   mints: string[]
 }) => {
   const [keyword, setKeyword] = useState('')
-  const { tokenProvider } = useMint()
 
   const search = useCallback(async () => {
     if (!keyword || keyword.length < KEYSIZE) return onChange(mints)
@@ -31,7 +32,7 @@ const Search = ({
       return data.push(mintAddress)
     })
     return onChange(data)
-  }, [keyword, onChange, tokenProvider, mints])
+  }, [keyword, onChange, mints])
 
   useEffect(() => {
     search()

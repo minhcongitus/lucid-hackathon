@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@senhub/providers'
 
 import { useAllMintAddresses } from './useAllMintAddresses'
+import TokenProvider from 'shared/tokenProvider'
 
 let searching: NodeJS.Timeout
+
+const tokenProvider = new TokenProvider()
 
 export const useSearchedMints = (keyword: string = '', limit: number) => {
   const [loading, setLoading] = useState(false)
   const [searchedMints, setSearchedMints] = useState<string[]>([])
-  const { tokenProvider } = useMint()
   const mints = useAllMintAddresses()
 
   const search = useCallback(async () => {
@@ -25,7 +26,7 @@ export const useSearchedMints = (keyword: string = '', limit: number) => {
       setLoading(false)
       return setSearchedMints(addresses)
     }, 500)
-  }, [keyword, limit, mints, tokenProvider])
+  }, [keyword, limit, mints])
 
   useEffect(() => {
     search()

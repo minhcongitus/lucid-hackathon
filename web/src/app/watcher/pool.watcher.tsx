@@ -10,9 +10,11 @@ import { useDispatch } from 'react-redux'
 import { upsetPool, upsetPools } from 'app/model/pools.controller'
 import { AppDispatch } from 'app/model'
 import { useLucid } from 'app/hooks/useLucid'
+import TokenProvider from 'shared/tokenProvider'
 
 // Watch id
 let watchId = 0
+const tokenProvider = new TokenProvider()
 
 const PoolWatcher: FunctionComponent = (props) => {
   const [loading, setLoading] = useState(true)
@@ -23,6 +25,7 @@ const PoolWatcher: FunctionComponent = (props) => {
   const fetchData = useCallback(async () => {
     try {
       let pools = await lucid.getPools()
+      await tokenProvider.all()
       await dispatch(upsetPools(pools)).unwrap()
     } catch (er) {
       return window.notify({

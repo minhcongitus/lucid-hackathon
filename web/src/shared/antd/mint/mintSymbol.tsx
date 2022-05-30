@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { account } from '@senswap/sen-js'
-import { useMint, usePool } from '@senhub/providers'
+import { usePool } from '@senhub/providers'
+import TokenProvider from 'shared/tokenProvider'
 
 const DEFAULT_SYMBOL = 'TOKN'
 
@@ -11,6 +12,7 @@ const DEFAULT_SYMBOL = 'TOKN'
  * @param reversed - (Optional) The default LP token symbol is A-B. The reversed is to change it to B-A
  * @returns symbol
  */
+const tokenProvider = new TokenProvider()
 const MintSymbol = ({
   mintAddress,
   separator = ' • ',
@@ -21,17 +23,13 @@ const MintSymbol = ({
   reversed?: boolean
 }) => {
   const [symbol, setSymbol] = useState(DEFAULT_SYMBOL)
-  const { tokenProvider } = useMint()
   const { pools } = usePool()
 
-  const deriveSymbol = useCallback(
-    async (address: string) => {
-      const token = await tokenProvider.findByAddress(address)
-      if (token?.symbol) return token.symbol
-      return address.substring(0, 4)
-    },
-    [tokenProvider],
-  )
+  const deriveSymbol = useCallback(async (address: string) => {
+    const token = await tokenProvider.findByAddress(address)
+    if (token?.symbol) return token.symbol
+    return address.substring(0, 4)
+  }, [])
 
   const deriveSymbols = useCallback(async () => {
     if (!account.isAddress(mintAddress)) return setSymbol(DEFAULT_SYMBOL)

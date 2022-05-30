@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useMint } from '@senhub/providers'
 
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintSelection } from 'shared/antd/mint'
 
 import { notifyError, notifySuccess } from 'app/helper'
@@ -24,8 +24,16 @@ const Deposit = ({
   closeModal: () => void
 }) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint, mint, lptMint, balance, baseBalance, lptSupply, fee } =
-    pools[poolAddress]
+  const {
+    baseMint,
+    mint,
+    lptMint,
+    balance,
+    baseBalance,
+    lptSupply,
+    fee,
+    stableBalance,
+  } = pools[poolAddress]
   const [amount, setAmount] = useState('0')
   const [baseAmount, setBaseAmount] = useState('0')
   const [loading, setLoading] = useState(false)
@@ -86,7 +94,7 @@ const Deposit = ({
     const baseAmountBN = await decimalizeMintAmount(value, baseMint)
     // const amountBN = await decimalizeMintAmount(amount, lptMint)
     const amountIns = [amountBN, baseAmountBN]
-    const balanceIns = [balance, baseBalance]
+    const balanceIns = [balance, stableBalance]
     const tokeDecimals = await getDecimals(mint.toBase58())
     const decimalIns = [tokeDecimals, BASE_TOKEN_DECIMAL]
     const lpt = calcDepositInfo(
@@ -101,94 +109,127 @@ const Deposit = ({
 
   return (
     <Row gutter={[16, 16]} style={{ color: '#000000' }}>
-      <Col span={24} style={{ textAlign: 'right' }}>
-        <Typography.Text style={{ color: '#000000' }}>
-          Available: {numeric(mintBalance.balance).format('0,0.[000]')}
-        </Typography.Text>
-      </Col>
+      {/* Mint Token */}
       <Col span={24}>
-        <Row justify="space-between">
-          <Col>
-            <Button
-              type="primary"
-              onClick={() => setAmount(mintBalance.balance.toString())}
-            >
-              MAX
-            </Button>
-          </Col>
-          <Col>
-            <NumericInput
-              bordered={false}
-              style={{
-                color: '#000000',
-                textAlign: 'center',
-                fontSize: '20px',
-                fontWeight: 700,
-              }}
-              value={amount}
-              onValue={onChangeTokenAmount}
-            />
-          </Col>
-          <Col>
-            <MintSelection
-              style={{
-                background: '#F4FCEB',
-                color: '#000000',
-                borderRadius: 32,
-                height: 40,
-                width: 135,
-              }}
-              disabled
-              value={mint.toBase58()}
-            />
-          </Col>
-        </Row>
+        <Card
+          bordered={false}
+          style={{
+            borderRadius: '4px 4px 0 0',
+            background: 'rgb(20 20 20 / 10%)',
+            boxShadow: 'unset',
+          }}
+        >
+          <Row justify="end" align="middle">
+            <Col>
+              <Space
+                onClick={() => setAmount(mintBalance.balance.toString())}
+                size={6}
+                style={{ cursor: 'pointer' }}
+              >
+                <Typography.Text
+                  type="secondary"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  Available:
+                </Typography.Text>
+                <Typography.Text
+                  style={{ color: '#000000', textDecoration: 'underline' }}
+                >
+                  {numeric(mintBalance.balance).format('0,0')}
+                </Typography.Text>
+              </Space>
+            </Col>
+            <Col span={24} />
+            <Col span={8}>
+              <MintSelection
+                style={{
+                  background: '#F4FCEB',
+                  color: '#000000',
+                  borderRadius: 32,
+                  height: 40,
+                  width: 135,
+                }}
+                disabled
+                value={mint.toBase58()}
+              />
+            </Col>
+            <Col span={16}>
+              <NumericInput
+                bordered={false}
+                style={{
+                  color: '#000000',
+                  fontSize: 32,
+                  fontWeight: 700,
+                  textAlign: 'right',
+                }}
+                value={amount}
+                onValue={onChangeTokenAmount}
+              />
+            </Col>
+          </Row>
+        </Card>
       </Col>
       {/* Base Token */}
-      <Col span={24} style={{ textAlign: 'right' }}>
-        <Typography.Text style={{ color: '#000000' }}>
-          Available: {numeric(baseBalanceOfAddress.balance).format('0,0.[000]')}
-        </Typography.Text>
-      </Col>
       <Col span={24}>
-        <Row justify="space-between">
-          <Col>
-            <Button
-              type="primary"
-              onClick={() =>
-                setBaseAmount(baseBalanceOfAddress.balance.toString())
-              }
-            >
-              MAX
-            </Button>
-          </Col>
-          <Col>
-            <NumericInput
-              bordered={false}
-              style={{
-                color: '#000000',
-                textAlign: 'center',
-                fontSize: '20px',
-                fontWeight: 700,
-              }}
-              value={baseAmount}
-              onValue={onChangeBaseAmount}
-            />
-          </Col>
-          <Col>
-            <MintSelection
-              style={{
-                background: '#F4FCEB',
-                color: '#000000',
-                borderRadius: 32,
-                height: 40,
-                width: 135,
-              }}
-              disabled
-              value={baseMint.toBase58()}
-            />
-          </Col>
-        </Row>
+        <Card
+          bordered={false}
+          style={{
+            borderRadius: '0 0 4px 4px',
+            background: 'rgb(20 20 20 / 10%)',
+            boxShadow: 'unset',
+          }}
+        >
+          <Row justify="end" align="middle">
+            <Col>
+              <Space
+                onClick={() =>
+                  setBaseAmount(baseBalanceOfAddress.balance.toString())
+                }
+                size={6}
+                style={{ cursor: 'pointer' }}
+              >
+                <Typography.Text
+                  type="secondary"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  Available:
+                </Typography.Text>
+                <Typography.Text
+                  style={{ color: '#000000', textDecoration: 'underline' }}
+                >
+                  {numeric(baseBalanceOfAddress.balance).format('0,0')}
+                </Typography.Text>
+              </Space>
+            </Col>
+            <Col span={24} />
+            <Col span={8}>
+              <MintSelection
+                style={{
+                  background: '#F4FCEB',
+                  color: '#000000',
+                  borderRadius: 32,
+                  height: 40,
+                  width: 135,
+                }}
+                disabled
+                value={baseMint.toBase58()}
+              />
+            </Col>
+            <Col span={16}>
+              <NumericInput
+                bordered={false}
+                style={{
+                  color: '#000000',
+                  fontSize: 32,
+                  fontWeight: 700,
+                  textAlign: 'right',
+                }}
+                value={baseAmount}
+                onValue={onChangeBaseAmount}
+              />
+            </Col>
+          </Row>
+        </Card>
       </Col>
       {/* Review */}
       <Col span={24}>

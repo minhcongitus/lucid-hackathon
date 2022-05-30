@@ -58,7 +58,7 @@ const supplementary = [
   {
     symbol: 'wETH',
     name: 'Ethereum',
-    address: '27hdcZv7RtuMp75vupThR3T4KLsL61t476eosMdoec4c',
+    address: '6PZYZ94K3yo4QdohYwa9RFVxtw8qFcFQqMtBjakn27BX',
     decimals: 9,
     chainId: 103,
     extensions: {
@@ -78,6 +78,30 @@ const supplementary = [
     },
     logoURI:
       'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/3MVa4e32PaKmPxYUQ6n8vFkWtCma68Ld7e7fTktWDueQ/logo.png',
+  },
+  {
+    chainId: 103,
+    address: 'Cz7YwKixHdwEcBnT4QDFWUHvjpQV19ZEJzwqKH4vVhfp',
+    symbol: 'SRM',
+    name: 'Serum',
+    decimals: 9,
+    logoURI:
+      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt/logo.png',
+    extensions: {
+      coingeckoId: 'serum',
+    },
+  },
+  {
+    chainId: 103,
+    address: 'BnVME3KEuE4Nw8mhhfpz353rw4AFVUYgvutfuLJx78AZ',
+    symbol: 'LUGEM',
+    name: 'Lucid GEM',
+    decimals: 9,
+    logoURI:
+      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/2YJH1Y5NbdwJGEUAMY6hoTycKWrRCP6kLKs62xiSKWHM/logo.png',
+    extensions: {
+      coingeckoId: 'serum',
+    },
   },
   {
     symbol: 'USDC',

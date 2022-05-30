@@ -15,6 +15,7 @@ import { usePoolData } from 'app/hooks/pool/usePoolData'
 import Selection from 'app/components/selection'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar } from 'shared/antd/mint'
+import { numeric } from 'shared/util'
 
 type BuyProps = {
   poolAddress: string
@@ -41,10 +42,9 @@ const Sell = ({ poolAddress }: BuyProps) => {
   const onBuy = async () => {
     setLoading(true)
     try {
-      console.log(amount, 'so luong amount')
       const amountBN = await decimalizeMintAmount(amount, baseMint)
-      const { txId } = await lucid.buy(poolAddress, amountBN, amountBN)
-      return notifySuccess('Deposited', txId)
+      const { txId } = await lucid.sell(poolAddress, amountBN)
+      return notifySuccess('Sell', txId)
     } catch (error) {
       notifyError(error)
     } finally {
@@ -61,8 +61,8 @@ const Sell = ({ poolAddress }: BuyProps) => {
     const numSwapFee = await undecimalizeMintAmount(fee, stableMint)
     const receiveAmount = calcOutGivenInSwap(
       Number(amount),
-      Number(balanceNum),
       Number(stableNum),
+      Number(balanceNum),
       Number(numSwapFee),
     )
     setReceive(`${receiveAmount}`)
@@ -163,7 +163,7 @@ const Sell = ({ poolAddress }: BuyProps) => {
                     }}
                     ellipsis
                   >
-                    {receive}
+                    {numeric(receive).format('0,0.[0000]')}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -173,7 +173,7 @@ const Sell = ({ poolAddress }: BuyProps) => {
       </Col>
       <Col span={24}>
         <Button loading={loading} type="primary" block onClick={onBuy}>
-          Buy
+          Sell
         </Button>
       </Col>
     </Row>

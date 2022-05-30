@@ -15,6 +15,8 @@ import { usePoolData } from 'app/hooks/pool/usePoolData'
 import Selection from 'app/components/selection'
 import { MintAvatar } from 'shared/antd/mint'
 import NumericInput from 'shared/antd/numericInput'
+import { numeric } from 'shared/util'
+import { BN } from 'bn.js'
 
 type BuyProps = {
   poolAddress: string
@@ -28,23 +30,22 @@ const Buy = ({ poolAddress }: BuyProps) => {
   const [amount, setAmount] = useState('0')
   const [receive, setReceive] = useState('0')
   const [loading, setLoading] = useState(false)
+  const poolData = usePoolData(poolAddress)
   const pools = useSelector((state: AppState) => state.pools)
   const { mint } = pools[poolAddress]
   const mintAddress = mint.toBase58()
   const lucid = useLucid()
   const { decimalizeMintAmount, undecimalizeMintAmount } = useOracles()
   const { calcOutGivenInSwap } = useLucidOracles()
-  const poolData = usePoolData(poolAddress)
 
   const { balance } = useAccountBalanceByMintAddress(baseMint)
 
   const onBuy = async () => {
     setLoading(true)
     try {
-      console.log(amount, 'so luong amount')
       const amountBN = await decimalizeMintAmount(amount, baseMint)
-      const { txId } = await lucid.buy(poolAddress, amountBN, amountBN)
-      return notifySuccess('Deposited', txId)
+      const { txId } = await lucid.buy(poolAddress, new BN(0), amountBN)
+      return notifySuccess('Buy', txId)
     } catch (error) {
       notifyError(error)
     } finally {
@@ -163,7 +164,7 @@ const Buy = ({ poolAddress }: BuyProps) => {
                     }}
                     ellipsis
                   >
-                    {receive}
+                    {numeric(receive).format('0,0.[0000]')}
                   </Typography.Text>
                 </Col>
               </Row>

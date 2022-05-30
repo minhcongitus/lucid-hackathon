@@ -3,7 +3,7 @@ import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Col, Modal, Row } from 'antd'
 import { useLucid } from 'app/hooks/useLucid'
-import { notifySuccess } from 'app/helper'
+import { notifyError, notifySuccess } from 'app/helper'
 import { useAccount } from '@senhub/providers'
 import BN from 'bn.js'
 import { MintAvatar } from 'shared/antd/mint'
@@ -32,6 +32,7 @@ const JupiterMarket = () => {
 
   const onClaimJupiter = async (jupiter: any) => {
     try {
+      console.log('call')
       const account = Object.values(accounts)[0]
       const txid = await lucid.swapJupiter(
         jupiter.account.baseMint,
@@ -42,7 +43,9 @@ const JupiterMarket = () => {
       if (txid) {
         notifySuccess('Claim 1000k', txid)
       }
-    } catch (error) {}
+    } catch (error) {
+      notifyError(error)
+    }
   }
 
   return (

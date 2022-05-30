@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { account } from '@senswap/sen-js'
-import { useMint, usePool } from '@senhub/providers'
+import { usePool } from '@senhub/providers'
+import TokenProvider from 'shared/tokenProvider'
 
 const DEFAULT_NAME = 'Unknown Token'
 
@@ -11,6 +12,8 @@ const DEFAULT_NAME = 'Unknown Token'
  * @param reversed - (Optional) The default LP token names is A-B. The reversed is to change it to B-A
  * @returns name
  */
+const tokenProvider = new TokenProvider()
+
 const MintName = ({
   mintAddress,
   separator = ' • ',
@@ -21,17 +24,13 @@ const MintName = ({
   reversed?: boolean
 }) => {
   const [name, setName] = useState(DEFAULT_NAME)
-  const { tokenProvider } = useMint()
   const { pools } = usePool()
 
-  const deriveName = useCallback(
-    async (address: string) => {
-      const token = await tokenProvider.findByAddress(address)
-      if (token?.name) return token.name
-      return DEFAULT_NAME
-    },
-    [tokenProvider],
-  )
+  const deriveName = useCallback(async (address: string) => {
+    const token = await tokenProvider.findByAddress(address)
+    if (token?.name) return token.name
+    return DEFAULT_NAME
+  }, [])
 
   const deriveNames = useCallback(async () => {
     if (!account.isAddress(mintAddress)) return setName(DEFAULT_NAME)

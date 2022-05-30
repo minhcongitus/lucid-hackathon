@@ -48,7 +48,7 @@ const useAccountBalance = (accountAddress: string) => {
   } = useWallet()
   const { accounts } = useAccount()
   const { amount, mint: mintAddress } = accounts[accountAddress] || {}
-  const decimals = useMintDecimals(mintAddress) || 0
+  const decimals = useMintDecimals(mintAddress) || 9
 
   if (!account.isAddress(walletAddress) || !account.isAddress(accountAddress))
     return buildResult()

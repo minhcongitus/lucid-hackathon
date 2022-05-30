@@ -1,7 +1,6 @@
 import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 import { fetchCGK, numeric } from 'shared/util'
 import { BN } from 'bn.js'
-import { useMint } from '@senhub/providers'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -15,7 +14,9 @@ import { usePoolData } from 'app/hooks/pool/usePoolData'
 
 import configs from 'app/configs'
 import './button.less'
+import TokenProvider from 'shared/tokenProvider'
 
+const tokenProvider = new TokenProvider()
 const {
   sol: { baseMint },
 } = configs
@@ -43,7 +44,6 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
   const [loading, setLoading] = useState(false)
   const { balance } = useAccountBalanceByMintAddress(mint)
   const { decimalizeMintAmount } = useOracles()
-  const { tokenProvider } = useMint()
   let bestPoolAddress = useBestPoolAddress()
   if (poolAddress) bestPoolAddress = poolAddress
   const bestPoolData = usePoolData(bestPoolAddress)
@@ -95,7 +95,7 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
       return setTotal(String(Number(amount) * info.price))
     }
     return setTotal('0')
-  }, [amount, mint, tokenProvider])
+  }, [amount, mint])
   useEffect(() => {
     fetchTotal()
   }, [fetchTotal])

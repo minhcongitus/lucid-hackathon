@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@senhub/providers'
+import TokenProvider from 'shared/tokenProvider'
+
+const tokenProvider = new TokenProvider()
 
 export const useAllMintAddresses = () => {
   const [allMintAddresses, setAllMintAddresses] = useState<string[]>([])
-  const { tokenProvider } = useMint()
 
   const getRecommendedMintAddresses = useCallback(async () => {
     const allMintAddresses = (await tokenProvider.all()).map(
@@ -13,7 +14,7 @@ export const useAllMintAddresses = () => {
       allMintAddresses.includes(mintAddress),
     )
     return setAllMintAddresses(addresses)
-  }, [tokenProvider])
+  }, [])
 
   useEffect(() => {
     getRecommendedMintAddresses()

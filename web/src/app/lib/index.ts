@@ -44,10 +44,13 @@ class LucidProgram {
 
   getPools = async (): Promise<PoolsState> => {
     let accounts = await this.program.account.pool.all()
-    accounts = accounts.sort(
-      (a, b) =>
-        b.account.totalLptFee.toNumber() - a.account.totalLptFee.toNumber(),
-    )
+    accounts = accounts.sort((a, b) => {
+      return a.account.lptSupply
+        .div(a.account.totalLptFee)
+        .gt(b.account.lptSupply.div(b.account.totalLptFee))
+        ? 1
+        : -1
+    })
     const pools: PoolsState = {}
     for (const account of accounts) {
       pools[account.publicKey.toBase58()] = account.account

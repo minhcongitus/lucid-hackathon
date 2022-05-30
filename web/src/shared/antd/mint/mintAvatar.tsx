@@ -1,9 +1,10 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { account } from '@senswap/sen-js'
-import { useMint, usePool } from '@senhub/providers'
+import { usePool } from '@senhub/providers'
 
 import { Avatar } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import TokenProvider from 'shared/tokenProvider'
 
 const DEFAULT_AVATARS: Array<string | undefined> = [undefined]
 
@@ -22,6 +23,8 @@ export type MintAvatarProps = {
  * @param reversed - (Optional) The default LP token avatar is A-B. The reversed is to change it to B-A
  * @returns name
  */
+const tokenProvider = new TokenProvider()
+
 const MintAvatar = ({
   mintAddress,
   size = 24,
@@ -30,17 +33,13 @@ const MintAvatar = ({
   ...props
 }: MintAvatarProps) => {
   const [avatars, setAvatars] = useState(DEFAULT_AVATARS)
-  const { tokenProvider } = useMint()
   const { pools } = usePool()
 
-  const deriveAvatar = useCallback(
-    async (address: string) => {
-      const token = await tokenProvider.findByAddress(address)
-      if (token?.logoURI) return token.logoURI
-      return undefined
-    },
-    [tokenProvider],
-  )
+  const deriveAvatar = useCallback(async (address: string) => {
+    const token = await tokenProvider.findByAddress(address)
+    if (token?.logoURI) return token.logoURI
+    return undefined
+  }, [])
 
   const deriveAvatars = useCallback(async () => {
     if (!account.isAddress(mintAddress)) return setAvatars(DEFAULT_AVATARS)
